@@ -46,7 +46,7 @@ def sign_request(request, client_name, client_key_file)
             :http_method => request.method,
             :body => request.body.string || '',
             :host => request.headers["Host"],
-            :path => request.fullpath,
+            :path => request.fullpath.split("?")[0],    # GET /thing?param=val becomes GET /thing
             :timestamp => Time.now.utc.iso8601,
             :user_id => client_name,
             :file => '',
@@ -99,4 +99,14 @@ def forward_request(request)
 
     #logger.debug " forward_request: {status => #{res.code}, message => #{res.message}, body => #{res.body}"
     return {"status" => res.code, "message" => res.message, "body" => res.body}
+end
+
+# Process a request within controller
+def process_request(request)
+ if verify_signed_request(request)
+     result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
+     render json: result["body"], :status => result["status"]
+ else
+   render json: {"error" => "Proxy could not verify signed request"}, :status => 401
+ end
 end
