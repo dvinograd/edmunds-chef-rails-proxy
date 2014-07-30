@@ -38,8 +38,26 @@ def verify_signed_request(request)
 
 end
 
-# Sign a request using mixlib-authentication and client key
-def sign_request(request, client_name, client_key)
+# Sign a request using mixlib-authentication and client key file
+def sign_request(request, client_name, client_key_file)
+
+    client_key = OpenSSL::PKey::RSA.new( ::File.read( client_key_file ) )
+    signed_headers = Mixlib::Authentication::SignedHeaderAuth.signing_object(
+            :http_method => request.method,
+            :body => request.body.string || '',
+            :host => request.headers["Host"],
+            :path => request.fullpath,
+            :timestamp => Time.now.utc.iso8601,
+            :user_id => client_name,
+            :file => '',
+          ).sign(client_key)
+
+    #logger.debug " sign_request: #{signed_headers}"
+
+    signed_headers.each do |k,v|
+        request.headers[k] = v
+    end
+
     return request
 end
 
@@ -57,11 +75,11 @@ def forward_request(request)
         when "DELETE"
             req = Net::HTTP::Delete.new(request.fullpath)
         else
-            logger.debug " forward_request: invalid request.method"
+            logger.warn " forward_request: invalid request.method"
             return nil
     end
 
-    logger.debug " forward_request: req.body: #{req.body}"
+    #logger.debug " forward_request: req.body: #{req.body}"
 
     headers_list = ["Content-Type", "Content-Length", "X-Chef-Version", "X-Ops-Sign", "X-Ops-Userid", "X-Ops-Content-Hash", "X-Ops-Timestamp", "X-Remote-Request-Id"]
     (1..9).to_a.each do |key|
@@ -69,7 +87,7 @@ def forward_request(request)
     end
     headers_list.each do |header|
         if request.headers[header]
-            logger.debug " forward_request: adding header #{header}"
+            #logger.debug " forward_request: adding header #{header}: #{request.headers[header]}"
             req[header] = request.headers[header]
         end
     end
@@ -79,6 +97,6 @@ def forward_request(request)
         http.request(req)
     }
 
-    logger.debug " forward_request: {status => #{res.code}, message => #{res.message}, body => #{res.body}"
+    #logger.debug " forward_request: {status => #{res.code}, message => #{res.message}, body => #{res.body}"
     return {"status" => res.code, "message" => res.message, "body" => res.body}
 end

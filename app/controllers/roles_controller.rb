@@ -3,7 +3,7 @@ require 'edmunds-chef-rails-proxy/common'
 class RolesController < ApplicationController
   def my_process_request(request)
     if verify_signed_request(request)
-        result = forward_request(request)
+        result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
         render json: result["body"], :status => result["status"]
     else
       render json: {"error" => "Proxy could not verify signed request"}, :status => 401
