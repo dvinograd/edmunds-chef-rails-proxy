@@ -3,26 +3,31 @@ require 'edmunds-chef-rails-proxy/common'
 class EnvironmentsController < ApplicationController
   # GET /environments
   def index
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # GET /environments/:id
   def show
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # POST /environments
   def create
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # PUT /environments/:id
   def update
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # DELETE /environments/:id
   def destroy
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 end

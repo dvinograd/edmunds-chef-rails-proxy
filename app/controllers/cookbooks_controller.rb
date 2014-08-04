@@ -3,26 +3,31 @@ require 'edmunds-chef-rails-proxy/common'
 class CookbooksController < ApplicationController
   # GET /cookbooks
   def index
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # GET /cookbooks/:id
   def show
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # POST /cookbooks
   def create
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # PUT /cookbooks/:id
   def update
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # DELETE /cookbooks/:id
   def destroy
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 end

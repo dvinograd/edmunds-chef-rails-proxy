@@ -15,7 +15,7 @@ def verify_signed_request(request)
     begin
         authenticator = Mixlib::Authentication::SignatureVerification.new(request)
         username = authenticator.user_id
-        user_key_file = "#{EdmundsChefRailsProxy::Application.config.client_keys_dir}/#{username}.pem"
+        user_key_file = "#{EdmundsChefRailsProxy::Application.config.user_keys_dir}/#{username}.pem"
         user_key = OpenSSL::PKey::RSA.new( ::File.read( user_key_file ) )
         authenticator.authenticate_request(user_key)
 
@@ -59,10 +59,12 @@ def sign_request(request, client_name, client_key_file)
     end
 
     return request
+
 end
 
 # Forward a request to Chef server, and return response
-def forward_request(request)
+def forward_request(chef_server, request)
+    
     case request.method
         when "GET"
             req = Net::HTTP::Get.new(request.fullpath)
@@ -92,39 +94,76 @@ def forward_request(request)
         end
     end
 
-    uri = URI.parse(EdmundsChefRailsProxy::Application.config.chef_server_url)
+    uri = URI.parse(chef_server[:url])
     res = Net::HTTP.start(uri.hostname, uri.port) { |http|
         http.request(req)
     }
 
     #logger.debug " forward_request: {status => #{res.code}, message => #{res.message}, body => #{res.body}"
     return {"status" => res.code, "message" => res.message, "body" => res.body}
+
+end
+
+# Decide which Chef server to use
+def determine_chef_server(request)
+    
+    # Return specified Chef server, if given and match found
+    if request.params["chef-server"]
+        EdmundsChefRailsProxy::Application.config.chef_servers.each do |chef_server|
+          if chef_server[:url] =~ /#{request.params["chef-server"]}/
+            return chef_server
+          end
+        end
+    end
+    
+    # Return matching Chef server if environment is specified
+    if request.params["chef-environment"] || request.fullpath =~ /\/environments\/.*/
+      chef_environment = request.params["chef-environment"] || request.fullpath[/\/environments\/([a-zA-Z0-9-]*).*/, 1]
+      logger.debug " determine_chef_server: chef_environment = #{chef_environment}"
+      EdmundsChefRailsProxy::Application.config.chef_servers.each do |chef_server|
+        logger.debug chef_server
+        chef_server[:envs].each do |chef_server_env|
+          if chef_environment =~ /#{chef_server_env}/
+            return chef_server
+          end
+        end
+      end
+    end
+
+    # At this point, return default Chef server
+    return EdmundsChefRailsProxy::Application.config.chef_servers[0]
+
 end
 
 # Process a request within controller
 def process_request(request)
+
+  chef_server = determine_chef_server(request)
+  logger.debug " process_request: chef_server = #{chef_server[:url]}"
+
   if request.headers["X-Ops-Sign"]
     # process signed request (from knife)
     if verify_signed_request(request)
-      result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
-      render json: result["body"], :status => result["status"]
-      return nil
+      result = forward_request( chef_server, sign_request(request, chef_server[:client_name], chef_server[:client_key]) )
+      return result
     else
-      render json: {"error" => "Proxy could not verify signed request"}, :status => 401
-      return nil
+      result = { "body" => {"error" => "Proxy could not process signed request"}, "status" => 401 }
+      return result
     end
+
   else
     # process unsigned request
     EdmundsChefRailsProxy::Application.config.anon_requests.each do |anon_req|
-      logger.debug " process_request: #{request.method} == #{anon_req[:method]} && #{request.fullpath} =~ /#{anon_req[:path]}/"
+      #logger.debug " process_request: #{request.method} =~ #{anon_req[:method]} && #{request.fullpath} =~ /#{anon_req[:path]}/"
       if request.method =~ /#{anon_req[:method]}/ && request.fullpath =~ /#{anon_req[:path]}/
-        result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
-        render json: result["body"], :status => result["status"]
-        return nil
+        result = forward_request( chef_server, sign_request(request, chef_server[:client_name], chef_server[:client_key]) )
+        return result
       end
     end
     # at this point, return 401 error
-    render json: {"error" => "Proxy could not process anonymous request"}, :status => 401
-    return nil
+    result = { "body" => {"error" => "Proxy could not process anonymous request"}, "status" => 401 }
+    return result
+
   end
+
 end

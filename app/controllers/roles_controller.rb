@@ -3,26 +3,31 @@ require 'edmunds-chef-rails-proxy/common'
 class RolesController < ApplicationController
   # GET /roles
   def index
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # GET /roles/:id
   def show
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # POST /roles
   def create
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # PUT /roles/:id
   def update
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 
   # DELETE /roles/:id
   def destroy
-    process_request(request)
+    result = process_request(request)
+    render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
   end
 end
