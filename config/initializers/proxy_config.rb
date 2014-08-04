@@ -6,3 +6,10 @@ EdmundsChefRailsProxy::Application.config.client_key = "/etc/edmunds-chef-rails-
 
 EdmundsChefRailsProxy::Application.config.chef_server_url = "http://chef11-preprod.vip.edmunds.com:80"
 
+EdmundsChefRailsProxy::Application.config.anon_requests = [
+    {:method => "GET", :path => "/roles"}, 
+    {:method => "GET", :path => "/roles/.*"}, 
+    {:method => "GET", :path => "/environments"},
+    {:method => "GET", :path => "/environments/.*"},
+    {:method => "GET", :path => "/cookbooks"},
+    {:method => "GET", :path => "/cookbooks/.*"} ]

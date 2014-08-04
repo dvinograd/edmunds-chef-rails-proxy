@@ -103,10 +103,28 @@ end
 
 # Process a request within controller
 def process_request(request)
- if verify_signed_request(request)
-     result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
-     render json: result["body"], :status => result["status"]
- else
-   render json: {"error" => "Proxy could not verify signed request"}, :status => 401
- end
+  if request.headers["X-Ops-Sign"]
+    # process signed request (from knife)
+    if verify_signed_request(request)
+      result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
+      render json: result["body"], :status => result["status"]
+      return nil
+    else
+      render json: {"error" => "Proxy could not verify signed request"}, :status => 401
+      return nil
+    end
+  else
+    # process unsigned request
+    EdmundsChefRailsProxy::Application.config.anon_requests.each do |anon_req|
+      logger.debug " process_request: #{request.method} == #{anon_req[:method]} && #{request.fullpath} =~ /#{anon_req[:path]}/"
+      if request.method =~ /#{anon_req[:method]}/ && request.fullpath =~ /#{anon_req[:path]}/
+        result = forward_request( sign_request(request, EdmundsChefRailsProxy::Application.config.client_name, EdmundsChefRailsProxy::Application.config.client_key) )
+        render json: result["body"], :status => result["status"]
+        return nil
+      end
+    end
+    # at this point, return 401 error
+    render json: {"error" => "Proxy could not process anonymous request"}, :status => 401
+    return nil
+  end
 end
