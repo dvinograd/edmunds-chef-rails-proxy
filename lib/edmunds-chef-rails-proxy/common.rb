@@ -68,14 +68,18 @@ def forward_request(chef_server, request)
     case request.method
         when "GET"
             req = Net::HTTP::Get.new(request.fullpath)
+            logger.debug " forward_request: created GET request with #{request.fullpath}"
         when "POST"
             req = Net::HTTP::Post.new(request.fullpath)
             req.body = request.body.string
+            logger.debug " forward_request: created POST request with #{request.fullpath}"
         when "PUT"
             req = Net::HTTP::Put.new(request.fullpath)
             req.body = request.body.string
+            logger.debug " forward_request: created PUT request with #{request.fullpath}"
         when "DELETE"
             req = Net::HTTP::Delete.new(request.fullpath)
+            logger.debug " forward_request: created DELETE request with #{request.fullpath}"
         else
             logger.warn " forward_request: invalid request.method"
             return nil
@@ -145,9 +149,11 @@ def process_request(request)
     # process signed request (from knife)
     if verify_signed_request(request)
       result = forward_request( chef_server, sign_request(request, chef_server[:client_name], chef_server[:client_key]) )
+      #logger.debug result
       return result
     else
       result = { "body" => {"error" => "Proxy could not process signed request"}, "status" => 401 }
+      #logger.debug result
       return result
     end
 
@@ -157,11 +163,13 @@ def process_request(request)
       #logger.debug " process_request: #{request.method} =~ #{anon_req[:method]} && #{request.fullpath} =~ /#{anon_req[:path]}/"
       if request.method =~ /#{anon_req[:method]}/ && request.fullpath =~ /#{anon_req[:path]}/
         result = forward_request( chef_server, sign_request(request, chef_server[:client_name], chef_server[:client_key]) )
+        #logger.debug result
         return result
       end
     end
     # at this point, return 401 error
     result = { "body" => {"error" => "Proxy could not process anonymous request"}, "status" => 401 }
+    #logger.debug result
     return result
 
   end
