@@ -44,7 +44,7 @@ def sign_request(request, client_name, client_key_file)
     client_key = OpenSSL::PKey::RSA.new( ::File.read( client_key_file ) )
     signed_headers = Mixlib::Authentication::SignedHeaderAuth.signing_object(
             :http_method => request.method,
-            :body => request.body.string || '',
+            :body => request.body.read(),
             :host => request.headers["Host"],
             :path => request.fullpath.split("?")[0],    # GET /thing?param=val becomes GET /thing
             :timestamp => Time.now.utc.iso8601,
