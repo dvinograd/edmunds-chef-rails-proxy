@@ -1,9 +1,5 @@
 require 'edmunds-chef-rails-proxy/common'
 
-def filter2(hsh, *keys)
-  hsh.reject { |k, _| keys.include? k }
-end
-
 class SearchController < ApplicationController
   # GET /search
   def index
