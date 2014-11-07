@@ -8,6 +8,8 @@ gem 'spring', :group => :development
 
 gem 'sqlite3'
 
+gem 'bcrypt'
+
 
 gem 'mixlib-authentication'
 
