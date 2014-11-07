@@ -26,5 +26,5 @@ EdmundsChefRailsProxy::Application.config.anon_requests = [
     {:method => "GET", :path => "/cookbooks/.*"},
     {:method => "GET", :path => "/nodes"},
     {:method => "GET", :path => "/nodes/.*"},
-    {:method => "GET", :path => "/search/node/.*"}
+    {:method => "GET", :path => "/search/.*"}
 ]
