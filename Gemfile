@@ -1,29 +1,28 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.1.4'
-
 gem 'rails-api'
 
-gem 'spring', :group => :development
-
+# Database
 gem 'sqlite3'
 
+# Misc libraries
 gem 'bcrypt'
-
-
 gem 'mixlib-authentication'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+# Misc dev libraries
+gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'spring', :group => :development
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+# App optimization
+gem 'turbolinks'
 
-# Use unicorn as the app server
-# gem 'unicorn'
+# UI: Javascript management
+gem 'bower-rails'
+gem 'angular-rails-templates'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'jquery-rails'
+gem 'uglifier', '>= 1.3.0'
 
-# Deploy with Capistrano
-# gem 'capistrano', :group => :development
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# UI: Stylesheet management
+#gem 'sass-rails'

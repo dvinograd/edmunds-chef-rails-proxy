@@ -15,4 +15,8 @@ Rails.application.routes.draw do
   resources :searches, :path => "search", :controller => "search", :only => [:index, :show]
   resources :users
 
+  # UI
+  root 'application#index'
+  get '*path' => 'application#index'
+
 end
