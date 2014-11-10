@@ -25,4 +25,4 @@ gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
 
 # UI: Stylesheet management
-#gem 'sass-rails'
+gem 'sass-rails', '~> 4.0.4'
