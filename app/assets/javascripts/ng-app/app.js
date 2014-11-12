@@ -2,6 +2,7 @@ angular
     .module('myApp', [
         'ngAnimate',
         'ui.router',
+        'restangular',
         'templates'
     ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
