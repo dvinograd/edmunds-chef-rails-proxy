@@ -23,19 +23,19 @@ angular
                 templateUrl: 'dashboard/layout.html'
             })
                 // the default route when someone hits dashboard
-                .state('dashboard.one', {
+                .state('dashboard.environments', {
                     url: '',
-                    templateUrl: 'dashboard/one.html'
+                    templateUrl: 'dashboard/environments.html'
                 })
-                // this is /dashboard/two
-                .state('dashboard.two', {
-                    url: '/two',
-                    templateUrl: 'dashboard/two.html'
+                // this is /dashboard/roles
+                .state('dashboard.roles', {
+                    url: '/roles',
+                    templateUrl: 'dashboard/roles.html'
                 })
-                // this is /dashboard/three
-                .state('dashboard.three', {
-                    url: '/three',
-                    templateUrl: 'dashboard/three.html'
+                // this is /dashboard/cookbooks
+                .state('dashboard.cookbooks', {
+                    url: '/cookbooks',
+                    templateUrl: 'dashboard/cookbooks.html'
                 });
 
         // default fall back route
