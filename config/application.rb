@@ -22,5 +22,10 @@ module EdmundsChefRailsProxy
 
     config.assets.paths << Rails.root.join("lib", "assets", "bower_components", "bootstrap-sass-official", "assets", "stylesheets")
     config.assets.paths << Rails.root.join("lib", "assets", "bower_components", "bootstrap-sass-official", "assets", "fonts")
+
+    config.assets.paths << Rails.root.join("app", "assets", "fonts", "lato")
+    config.assets.paths << Rails.root.join("app", "assets", "fonts", "glyphicons")
+    config.assets.precompile += %w( .svg .eot .woff .ttf)
+
   end
 end
