@@ -18,8 +18,8 @@ ActiveRecord::Schema.define(version: 20141106230205) do
     t.string   "email"
     t.string   "password"
     t.string   "pubkey"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "password_digest"
   end
 
