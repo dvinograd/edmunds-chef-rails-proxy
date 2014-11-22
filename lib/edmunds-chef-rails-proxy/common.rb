@@ -1,4 +1,4 @@
-# Common functions for proxy
+# Common functions for Chef Proxy
 
 require 'mixlib/authentication/http_authentication_request'
 require 'mixlib/authentication/signatureverification'
@@ -8,6 +8,17 @@ require 'openssl'
 require 'net/http'
 require 'net/https'
 require 'uri'
+
+
+module ActionDispatch
+  class Request
+    def fullpath=(val)
+#      @env['REQUEST_PATH'] = val
+      @fullpath = val
+    end
+  end
+end
+
 
 # Verify signed request using mixlib-authentication
 def verify_signed_request(request)
@@ -171,6 +182,28 @@ def process_request(request)
     result = { "body" => {"error" => "Proxy could not process anonymous request"}, "status" => 401 }
     #logger.debug result
     return result
+
+  end
+
+end
+
+def process_api_request(request, api_path)
+
+  request.fullpath = request.fullpath.gsub(api_path, "")
+  orig_result = process_request(request)
+
+  case
+  when ( request.fullpath == '/roles' || request.fullpath == '/environments' || request.fullpath == '/cookbooks' )
+    # Return just the sorted array of items
+    items = []
+    JSON.parse(orig_result["body"]).each do |item|
+      items << item[0]
+    end
+    result = { "body" => items.sort, "status" => 200 }
+    return result
+
+  else
+    return orig_result
 
   end
 
