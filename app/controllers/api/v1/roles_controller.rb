@@ -6,8 +6,18 @@ module Api
 
       def index
         result = process_api_request(request, 'api/v1/')
-        render :json => JSON.pretty_generate(result["body"]), :status => result["status"]
+        if result["status"] == 200
+          render :json => JSON.pretty_generate(result["body"]), :status => result["status"]
+        else
+          render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
+        end
       end
+
+      def show
+        result = process_api_request(request, 'api/v1/')
+        render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
+      end
+
     end
   end
 end

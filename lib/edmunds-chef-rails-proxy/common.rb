@@ -13,7 +13,6 @@ require 'uri'
 module ActionDispatch
   class Request
     def fullpath=(val)
-#      @env['REQUEST_PATH'] = val
       @fullpath = val
     end
   end
@@ -189,17 +188,32 @@ end
 
 def process_api_request(request, api_path)
 
+  # Get response to this request from Chef
   request.fullpath = request.fullpath.gsub(api_path, "")
   orig_result = process_request(request)
+  if orig_result["status"] != "200"
+    logger.warn " process_api_request #{request.fullpath} orig_result.status was #{orig_result["status"]}"
+    return orig_result
+  end
 
+  # Modify response as needed
   case
   when ( request.fullpath == '/roles' || request.fullpath == '/environments' || request.fullpath == '/cookbooks' )
-    # Return just the sorted array of items
+    # List of roles, environments, or cookbooks
     items = []
     JSON.parse(orig_result["body"]).each do |item|
       items << item[0]
     end
     result = { "body" => items.sort, "status" => 200 }
+    return result
+
+  when ( request.fullpath =~ /^\/cookbooks\/[A-Za-z0-9_-]*$/ )
+    # List of versions for given cookbook
+    versions = []
+    JSON.parse(orig_result["body"])[request.params["id"]]["versions"].each do |version|
+        versions << version["version"]
+    end
+    result = { "body" => versions.sort, "status" => 200 }
     return result
 
   else
