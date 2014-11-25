@@ -22,9 +22,14 @@ module EdmundsChefRailsProxy
 
     config.assets.paths << Rails.root.join("lib", "assets", "bower_components", "bootstrap-sass-official", "assets", "stylesheets")
     config.assets.paths << Rails.root.join("lib", "assets", "bower_components", "bootstrap-sass-official", "assets", "fonts")
+    # Precompile Bootstrap fonts
+    config.assets.precompile << %r(bootstrap/[\w-]+\.(?:eot|svg|ttf|woff)$)
+    # Minimum Sass number precision required by bootstrap-sass
+    ::Sass::Script::Number.precision = [10, ::Sass::Script::Number.precision].max
 
     config.assets.paths << Rails.root.join("app", "assets", "fonts", "lato")
     config.assets.paths << Rails.root.join("app", "assets", "fonts", "glyphicons")
+    # Precompile FlatUI fonts
     config.assets.precompile += %w( .svg .eot .woff .ttf)
 
   end
