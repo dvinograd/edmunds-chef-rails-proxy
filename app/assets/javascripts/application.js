@@ -10,14 +10,16 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require angular
-//= require angular-animate
-//= require angular-route
-//= require angular-ui-router
+//= require bower_components/jquery/dist/jquery
+//= require bower_components/jquery-ujs/src/rails
+//= require bower_components/bootstrap-sass-official/assets/javascripts/bootstrap
+//= require bower_components/bootstrap-sass-official/assets/javascripts/bootstrap-sprockets
+//= require bower_components/angular/angular
+//= require bower_components/angular-animate/angular-animate
+//= require bower_components/angular-route/angular-route
+//= require bower_components/angular-ui-router/release/angular-ui-router
 //= require angular-rails-templates
-//= require underscore
-//= require restangular
+//= require bower_components/underscore/underscore
+//= require bower_components/restangular/dist/restangular
 //= require_tree ../templates
 //= require_tree .
