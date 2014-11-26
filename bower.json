@@ -2,16 +2,32 @@
   "lib": {
     "name": "bower-rails generated lib assets",
     "dependencies": {
-         "angular": "latest",
-         "angular-route": "latest",
-         "angular-ui-router": "latest",
-         "angular-animate": "latest",
-         "restangular": "latest",
-         "underscore": "latest",
-         "jquery": "latest",
-         "jquery-ujs": "latest",
-         "bootstrap-sass-official": "latest",
-         "bootstrap3-dialog": "latest"
+        "angular": "latest",
+        "angular-route": "latest",
+        "angular-ui-router": "latest",
+        "angular-animate": "latest",
+        "restangular": "latest",
+        "underscore": "latest",
+        "jquery": "latest",
+        "jquery-ui": "latest",
+        "jquery-ujs": "latest",
+        "bootstrap-sass-official": "latest",
+        "bootstrap3-dialog": "latest",
+        // flat-ui-pro dependencies
+        "bootstrap-switch": "latest",
+        "bootstrap-tagsinput": "latest",
+        "holderjs": "latest",
+        "html5shiv": "latest",
+        "jquery-placeholder": "latest",
+        "jquery-ui-touch-punch": "latest",
+        "jquery-timepicker-jt": "latest",
+        "respond": "latest",
+        "typeahead.js": "latest",
+        "google-code-prettify": "latest",
+        "videojs": "latest",
+        "select2": "latest",
+        "datatables": "latest",
+        "datatables-plugins": "latest"
     }
   },
   "vendor": {

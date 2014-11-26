@@ -11,9 +11,19 @@
  * file per style scope.
  *
  */
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import "bootstrap-dialog";
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap-sprockets";
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap";
+@import "bootstrap-switch/dist/css/bootstrap3/bootstrap-switch";
+@import "bootstrap-tagsinput/dist/bootstrap-tagsinput";
+@import "bootstrap3-dialog/dist/css/bootstrap-dialog";
+
+@import "jquery-timepicker-jt/jquery.timepicker";
+
+@import "google-code-prettify/bin/prettify.min";
+@import "videojs/dist/video-js/video-js";
+@import "select2/select2";
+@import "datatables/media/css/jquery.dataTables";
+
 @import "flat-ui-pro";
 
 @import "ng-app/main";
