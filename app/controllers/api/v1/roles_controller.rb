@@ -15,7 +15,11 @@ module Api
 
       def show
         result = process_api_request(request, 'api/v1/')
-        render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
+        if request.params["format"] == "text"
+          render :text => format_data(result["body"], "text"), :status => result["status"]
+        else
+          render :json => JSON.pretty_generate(JSON.parse(result["body"])), :status => result["status"]
+        end
       end
 
     end

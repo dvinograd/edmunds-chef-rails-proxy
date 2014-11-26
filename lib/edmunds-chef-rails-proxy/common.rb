@@ -9,7 +9,6 @@ require 'net/http'
 require 'net/https'
 require 'uri'
 
-
 module ActionDispatch
   class Request
     def fullpath=(val)
@@ -221,4 +220,14 @@ def process_api_request(request, api_path)
 
   end
 
+end
+
+def format_data(data, fmt)
+    require 'chef/knife/core/generic_presenter'
+    require 'chef/knife/core/ui'
+
+    #Chef::Knife::Core::TextFormatter.new( data, Chef::Knife::UI.new(STDOUT, STDERR, STDIN, {}) ).formatted_data
+    ui = Chef::Knife::UI.new(STDOUT, STDERR, STDIN, {:format => fmt})
+    pr = Chef::Knife::Core::GenericPresenter.new(ui, {:format => fmt})
+    return pr.format(JSON.parse(data))
 end

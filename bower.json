@@ -8,7 +8,8 @@
          "angular-animate": "latest",
          "restangular": "latest",
          "underscore": "latest",
-         "bootstrap-sass-official": "latest"
+         "bootstrap-sass-official": "latest",
+         "bootstrap3-dialog": "latest"
     }
   },
   "vendor": {

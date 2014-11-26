@@ -1,5 +1,5 @@
 <div ng-controller="EnvironmentsCtrl">
   <ul>
-    <li class="list-group-item" ng-repeat="environment in environments">{{environment}}</li>
+    <li class="list-group-item" ng-repeat="environment in environments"><b>{{environment}}</b> <a href="#" ng-click="showEnvironment(environment, 'chef11-preprod')">[preprod]</a> <a href="#" ng-click="showEnvironment(environment, 'chef11-preprod')">[prod]</a> <a href="#" ng-click="showEnvironmentDiff(environment, 'chef11-preprod', 'chef11-prod')">[diff]</a></li>
   </ul>
 </div>

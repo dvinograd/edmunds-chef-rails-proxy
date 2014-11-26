@@ -6,9 +6,13 @@ gem 'rails-api'
 # Database
 gem 'sqlite3'
 
+# Chef libraries
+gem 'mixlib-authentication'
+gem 'chef'
+
 # Misc libraries
 gem 'bcrypt'
-gem 'mixlib-authentication'
+gem 'diffy'
 
 # Misc dev libraries
 gem 'sdoc', '~> 0.4.0', group: :doc

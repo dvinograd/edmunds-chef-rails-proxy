@@ -1,5 +1,5 @@
 <div ng-controller="RolesCtrl">
   <ul>
-    <li class="list-group-item" ng-repeat="role in roles"><b>{{role}}</b> <a ng-click="showRole(role, 'chef11-preprod')">[preprod]</a> <a ng-click="showRole(role, 'chef11-prod')">[prod]</a> <a ng-click="showRoleDiff(role, 'chef11-preprod', 'chef11-prod')">[diff]</a></li>
+    <li class="list-group-item" ng-repeat="role in roles"><b>{{role}}</b> <a href="#" ng-click="showRole(role, 'chef11-preprod')">[preprod]</a> <a href="#" ng-click="showRole(role, 'chef11-preprod')">[prod]</a> <a href="#" ng-click="showRoleDiff(role, 'chef11-preprod', 'chef11-prod')">[diff]</a></li>
   </ul>
 </div>
